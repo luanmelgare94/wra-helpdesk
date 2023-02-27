@@ -108,7 +108,7 @@ public class EmailServiceImpl implements EmailService {
     public boolean activateEntityById(Integer id) {
         log.info("EmailServiceImpl.activateEntityById");
         log.info("EmailServiceImpl.activateEntityById.id: " + id);
-        return emailRepository.updateActiveOfEmailEntityById(true, id) == NUMBER_ONE;
+        return emailRepository.updateActiveOfEmailEntityById(Boolean.TRUE, id) == NUMBER_ONE;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -116,7 +116,21 @@ public class EmailServiceImpl implements EmailService {
     public boolean deactivateEntityById(Integer id) {
         log.info("EmailServiceImpl.deactivateEntityById");
         log.info("EmailServiceImpl.deactivateEntityById.id: " + id);
-        return emailRepository.updateActiveOfEmailEntityById(false, id) == NUMBER_ONE;
+        return emailRepository.updateActiveOfEmailEntityById(Boolean.FALSE, id) == NUMBER_ONE;
+    }
+
+    @Override
+    public List<EmailEntity> getAllEmailEntityActivatedByIdPerson(Integer idPerson) {
+        log.info("EmailServiceImpl.getAllEmailEntityActivatedByIdPerson");
+        log.info("EmailServiceImpl.getAllEmailEntityActivatedByIdPerson.idPerson: " + idPerson);
+        return emailRepository.getAllEmailEntityByIdPersonAndActive(idPerson, Boolean.TRUE);
+    }
+
+    @Override
+    public List<EmailEntity> getAllEmailEntityDeactivatedByIdPerson(Integer idPerson) {
+        log.info("EmailServiceImpl.getAllEmailEntityDeactivatedByIdPerson");
+        log.info("EmailServiceImpl.getAllEmailEntityDeactivatedByIdPerson.idPerson: " + idPerson);
+        return emailRepository.getAllEmailEntityByIdPersonAndActive(idPerson, Boolean.FALSE);
     }
 
 }

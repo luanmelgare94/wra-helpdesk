@@ -5,8 +5,11 @@ import static com.cdc.inlog.pe.util.Constants.APPLICATION_JSON_UTF8_VALUE;
 import static com.cdc.inlog.pe.util.Constants.MSG_POSITIVE;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_ONE;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_TWO;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_ALL;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_PATCH_BY_ID;
+
+import com.cdc.inlog.pe.dto.config.ConfigDefaultDto;
 import com.cdc.inlog.pe.dto.config.ConfigUpdateDto;
 import com.cdc.inlog.pe.mapper.ConfigMapper;
 import com.cdc.inlog.pe.service.ConfigService;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @Validated
 @RestController
@@ -34,6 +39,12 @@ public class ConfigController {
 
     @Autowired
     private ConfigService configService;
+
+    @GetMapping(path = SUB_API_GET_ALL, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<ConfigDefaultDto>> getAllConfigEntity() {
+        log.info("ConfigController.getAllConfigEntity");
+        return new ResponseEntity<>(configMapper.mapListConfigEntityToListConfigDefaultDto(configService.getAllEntity()), HttpStatus.OK);
+    }
 
     @GetMapping(path = SUB_API_GET_BY_ID, produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Object> getConfigById(@RequestParam @Min(value = 1, message = MSG_POSITIVE) Integer codigo) {

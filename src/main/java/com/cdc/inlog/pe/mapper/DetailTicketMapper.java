@@ -27,7 +27,8 @@ public interface DetailTicketMapper {
     DetailTicketResponseDto mapDetailTicketEntityToDetailTicketResponseDto(DetailTicketEntity detailTicketEntity);
 
     @Mapping(source = "idDetailTicket", target = "codigo")
-    @Mapping(source = "ticketEntity.typeTicketEntity.typeTicket", target = "datosTicket.tipoTicket")
+    @Mapping(source = "ticketEntity.categoryTicketEntity.categoryTicket", target = "datosTicket.categoriaTicket")
+    @Mapping(source = "ticketEntity.priorityEntity.priority", target = "datosTicket.prioridad")
     @Mapping(source = "ticketEntity.usernameEntity.username", target = "datosTicket.datosUsuario.usuario")
     @Mapping(expression = "java(usernameEntity.getPersonEntity().getFullName())", target = "datosTicket.datosUsuario.nombrePersona")
     @Mapping(source = "ticketEntity.dateRegister.", target = "datosTicket.fechoraRegistro")

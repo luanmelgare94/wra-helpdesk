@@ -5,6 +5,8 @@ import com.cdc.inlog.pe.service.generic.GenericService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface UsernameService extends GenericService<UsernameEntity> {
 
     public Integer updateUsernameEntityPasswdByIdUsername(String passwd, String username);
@@ -14,5 +16,7 @@ public interface UsernameService extends GenericService<UsernameEntity> {
     public Page<UsernameEntity> getAllEntityActivated(Pageable pageable);
 
     public Page<UsernameEntity> getAllEntityDeactivated(Pageable pageable);
+
+    public List<UsernameEntity> getAllEntityActivatedByIdRole(Integer idRole);
 
 }

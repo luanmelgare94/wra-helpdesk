@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface EmailRepository extends JpaRepository<EmailEntity, Integer> {
 
     @Modifying
@@ -21,5 +23,8 @@ public interface EmailRepository extends JpaRepository<EmailEntity, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE public.email SET id_type_email = ?1, email = ?2 WHERE id_email = ?3")
     public int updateEmailEntityIdTypeEmailAndEmailByIdEmail(Integer idTypeEmail, String email, Integer idEmail);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM public.email where id_person = ?1 AND active = ?2")
+    public List<EmailEntity> getAllEmailEntityByIdPersonAndActive(Integer idPerson, boolean active);
 
 }

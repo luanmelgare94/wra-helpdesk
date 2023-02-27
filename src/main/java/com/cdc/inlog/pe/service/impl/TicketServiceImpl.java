@@ -1,15 +1,14 @@
 package com.cdc.inlog.pe.service.impl;
 
-import static com.cdc.inlog.pe.util.Constants.NUMBER_ONE;
-import static com.cdc.inlog.pe.util.Constants.NUMBER_TWO;
-import static com.cdc.inlog.pe.util.Constants.NUMBER_ZERO;
-import static com.cdc.inlog.pe.util.Constants.WORD_ID_TICKET;
+import com.cdc.inlog.pe.entity.CategoryTicketEntity;
 import com.cdc.inlog.pe.entity.TicketEntity;
 import com.cdc.inlog.pe.entity.TypeTicketEntity;
 import com.cdc.inlog.pe.entity.UsernameEntity;
 import com.cdc.inlog.pe.repository.*;
 import com.cdc.inlog.pe.service.TicketService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +21,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.cdc.inlog.pe.util.Constants.*;
+
 @Slf4j
 @Service
 public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private CategoryTicketRepository categoryTicketRepository;
 
     @Autowired
     private DetailTicketRepository detailTicketRepository;
@@ -72,8 +76,8 @@ public class TicketServiceImpl implements TicketService {
         log.info("TicketServiceImpl.registerEntity");
         TicketEntity ticketEntityAux = ticketRepository.findById(ticketRepository.save(ticketEntity).getIdTicket())
                 .orElse(new TicketEntity());
-        ticketEntityAux.setTypeTicketEntity(typeTicketRepository.findById(
-                ticketEntityAux.getTypeTicketEntity().getIdTypeTicket()).orElse(new TypeTicketEntity()));
+        ticketEntityAux.setCategoryTicketEntity(categoryTicketRepository.findById(
+                ticketEntityAux.getCategoryTicketEntity().getIdCategoryTicket()).orElse(new CategoryTicketEntity()));
         ticketEntityAux.setUsernameEntity(usernameRepository.findById(
                 ticketEntityAux.getUsernameEntity().getIdUsername()).orElse(new UsernameEntity()));
         ticketEntityAux.setDetailTicketEntityList(detailTicketRepository.getDetailTicketEntityByIdTicketAndActive(
@@ -94,8 +98,7 @@ public class TicketServiceImpl implements TicketService {
         log.info("TicketServiceImpl.updateEntityById");
         log.info("TicketServiceImpl.updateEntityById.idTicketEntity: " + ticketEntity.getIdTicket());
         if (ticketRepository.existsById(ticketEntity.getIdTicket())) {
-            return ticketRepository.updateTicketEntityIdTypeTicketAndDescriptionAndObservationByIdTicket(
-                    ticketEntity.getTypeTicketEntity().getIdTypeTicket(),
+            return ticketRepository.updateTicketEntityDescriptionAndObservationByIdTicket(
                     ticketEntity.getDescription(),
                     ticketEntity.getObservation(),
                     ticketEntity.getIdTicket()).equals(NUMBER_ONE) ? NUMBER_ONE : NUMBER_ZERO;
@@ -164,6 +167,29 @@ public class TicketServiceImpl implements TicketService {
         log.info("TicketServiceImpl.getAllEntityDeactivated.pageSize: " + pageable.getPageSize());
         return ticketRepository.findByActive(Boolean.FALSE,
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(WORD_ID_TICKET).ascending()));
+    }
+
+    @Override
+    public boolean isCategorizedAndPrioritized(Integer idTicket) {
+        log.info("TicketServiceImpl.isCategorizedAndPrioritized");
+        log.info("TicketServiceImpl.isCategorizedAndPrioritized.idTicket: " + idTicket);
+        TicketEntity ticketEntity = ticketRepository.findById(idTicket).orElse(new TicketEntity());
+        return !ticketEntity.getCategoryTicketEntity().getIdCategoryTicket().equals(NUMBER_NINE) &&
+                !ticketEntity.getPriorityEntity().getIdPriority().equals(NUMBER_FOUR);
+    }
+
+    @Override
+    public boolean updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(Integer idTicket, Integer idCategory,
+                                                                        Integer idPriority, String userMonitor) {
+        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority");
+        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idTicket: " + idTicket);
+        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idCategory: " + idCategory);
+        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idPriority: " + idPriority);
+        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.userMonitor: " + userMonitor);
+        return !ticketRepository
+                .updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(idCategory, idPriority,
+                        userMonitor, LocalDateTime.now(ZoneId.of(TIME_ZONE_PERU)), idTicket)
+                .equals(NUMBER_ZERO);
     }
 
 }

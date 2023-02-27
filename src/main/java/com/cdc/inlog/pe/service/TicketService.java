@@ -13,4 +13,9 @@ public interface TicketService extends GenericService<TicketEntity> {
 
     public Page<TicketEntity> getAllEntityDeactivated(Pageable pageable);
 
+    public boolean isCategorizedAndPrioritized(Integer idTicket);
+
+    public boolean updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(Integer idTicket, Integer idCategory,
+                                                                        Integer idPriority, String userMonitor);
+
 }

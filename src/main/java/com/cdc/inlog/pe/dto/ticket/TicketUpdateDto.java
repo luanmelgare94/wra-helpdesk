@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class TicketUpdateDto {
 
-    private Integer codigoTipoTicket;
+    private Integer codigoCategoriaTicket;
 
     private String descripcion;
 

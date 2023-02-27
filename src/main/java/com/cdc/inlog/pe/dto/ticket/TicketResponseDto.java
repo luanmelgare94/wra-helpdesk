@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class TicketResponseDto {
 
-    private String tipoTicket;
+    private String categoriaTicket;
 
     private String usuarioRegistro;
 

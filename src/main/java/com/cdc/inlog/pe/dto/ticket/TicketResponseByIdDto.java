@@ -11,13 +11,19 @@ public class TicketResponseByIdDto {
 
     private Integer codigo;
 
-    private TicketResponseByIdCodeAndNameDto datosTipoTicket;
+    private TicketResponseByIdCodeAndNameDto datosCategoriaTicket;
+
+    private TicketResponseByIdPrioridadDto datosPrioridad;
 
     private TicketResponseByIdUsernameDto datosUsuario;
+
+    private String asunto;
 
     private String descripcion;
 
     private String observacion;
+
+    //private TicketResponseByIdCodeAndNameDto asesorAsignado;
 
     private LocalDateTime fechaRegistro;
 
@@ -55,6 +61,14 @@ public class TicketResponseByIdDto {
         private Integer codigo;
         private String usuario;
         private String nombrePersona;
+    }
+
+    @Getter
+    @Setter
+    public static class TicketResponseByIdPrioridadDto {
+        private Integer codigo;
+        private String prioridad;
+        private String codigoColor;
     }
 
 }

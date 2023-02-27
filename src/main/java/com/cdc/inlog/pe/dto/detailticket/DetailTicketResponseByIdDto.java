@@ -25,7 +25,8 @@ public class DetailTicketResponseByIdDto {
     @Getter
     @Setter
     public static class DetailTicketTicketResponseByIdDto {
-        private String tipoTicket;
+        private String categoriaTicket;
+        private String prioridad;
         private DetailTicketUsernameResponseByIdDto datosUsuario;
         private LocalDateTime fechoraRegistro;
     }

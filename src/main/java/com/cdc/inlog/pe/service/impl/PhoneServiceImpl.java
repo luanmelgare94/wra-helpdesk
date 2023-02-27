@@ -4,7 +4,10 @@ import static com.cdc.inlog.pe.util.Constants.NUMBER_ZERO;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_ONE;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_TWO;
 import static com.cdc.inlog.pe.util.Constants.WORD_PHONE;
+
+import com.cdc.inlog.pe.entity.PersonEntity;
 import com.cdc.inlog.pe.entity.PhoneEntity;
+import com.cdc.inlog.pe.repository.PersonRepository;
 import com.cdc.inlog.pe.repository.PhoneRepository;
 import com.cdc.inlog.pe.service.PhoneService;
 import java.util.List;
@@ -22,6 +25,9 @@ public class PhoneServiceImpl implements PhoneService {
 
     @Autowired
     private PhoneRepository phoneRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
 
     @Override
     public List<PhoneEntity> getAllEntity() {
@@ -58,7 +64,11 @@ public class PhoneServiceImpl implements PhoneService {
     @Override
     public PhoneEntity registerEntity(PhoneEntity phoneEntity) {
         log.info("PhoneServiceImpl.registerEntity");
-        return phoneRepository.save(phoneEntity);
+        PhoneEntity phoneEntityAux = phoneRepository.findById(phoneRepository.save(phoneEntity).getIdPhone())
+                .orElse(new PhoneEntity());
+        phoneEntityAux.setPersonEntity(personRepository.findById(phoneEntityAux.getPersonEntity().getIdPerson())
+                .orElse(new PersonEntity()));
+        return phoneEntityAux;
     }
 
     @Override
@@ -111,4 +121,17 @@ public class PhoneServiceImpl implements PhoneService {
         return phoneRepository.updateActiveOfPhoneEntityById(false, id) == NUMBER_ONE;
     }
 
+    @Override
+    public List<PhoneEntity> getAllPhoneEntityActivatedByIdPerson(Integer idPerson) {
+        log.info("PhoneServiceImpl.getAllPhoneEntityActivatedByIdPerson");
+        log.info("PhoneServiceImpl.getAllPhoneEntityActivatedByIdPerson.idPerson: " + idPerson);
+        return phoneRepository.getAllPhoneEntityByIdPersonAndActive(idPerson, Boolean.TRUE);
+    }
+
+    @Override
+    public List<PhoneEntity> getAllPhoneEntityDeactivatedByIdPerson(Integer idPerson) {
+        log.info("PhoneServiceImpl.getAllPhoneEntityDeactivatedByIdPerson");
+        log.info("PhoneServiceImpl.getAllPhoneEntityDeactivatedByIdPerson.idPerson: " + idPerson);
+        return phoneRepository.getAllPhoneEntityByIdPersonAndActive(idPerson, Boolean.FALSE);
+    }
 }

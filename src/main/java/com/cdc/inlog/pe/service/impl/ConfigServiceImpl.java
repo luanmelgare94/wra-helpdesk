@@ -27,7 +27,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public List<ConfigEntity> getAllEntity() {
         log.info("ConfigServiceImpl.getAllEntity");
-        return new ArrayList<>();
+        return configRepository.findAll();
     }
 
     @Override

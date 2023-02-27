@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface PhoneRepository extends JpaRepository<PhoneEntity, Integer> {
 
     @Modifying
@@ -23,5 +25,8 @@ public interface PhoneRepository extends JpaRepository<PhoneEntity, Integer> {
             "WHERE id_phone = ?4")
     public int updatePhoneEntityIdTypePhoneAndIdOperatorAndPhoneByIdPhone(Integer idTypePhone, Integer idOperator,
                                                                           String phone, Integer idPhone);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM public.phone where id_person = ?1 AND active = ?2")
+    public List<PhoneEntity> getAllPhoneEntityByIdPersonAndActive(Integer idPerson, boolean active);
 
 }

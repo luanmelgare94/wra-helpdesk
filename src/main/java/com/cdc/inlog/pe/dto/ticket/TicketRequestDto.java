@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class TicketRequestDto {
 
-    private TicketRequestCodeDto tipoTicket;
-
     private TicketRequestCodeDto usuarioRegistro;
+
+    private String asunto;
 
     private String descripcion;
 

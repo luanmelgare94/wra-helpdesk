@@ -189,4 +189,11 @@ public class UsernameServiceImpl implements UsernameService {
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(WORD_USERNAME).ascending()));
     }
 
+    @Override
+    public List<UsernameEntity> getAllEntityActivatedByIdRole(Integer idRole) {
+        log.info("UsernameServiceImpl.getAllEntityActivatedByIdRole");
+        log.info("UsernameServiceImpl.getAllEntityActivatedByIdRole.idRole: " + idRole);
+        return usernameRepository.getUsernameEntityByActiveAndRole(Boolean.TRUE, idRole);
+    }
+
 }

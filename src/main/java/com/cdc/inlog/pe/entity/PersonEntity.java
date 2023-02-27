@@ -58,7 +58,7 @@ public class PersonEntity {
     private TypeDocumentEntity typeDocumentEntity;
 
     @Size(min = 6, max = 20, message = "El documento como minimo debe contar con 6 caracteres y como maximo 20 caracteres")
-    @Column(length = 20, nullable = false, unique = true)
+    @Column(length = 20, nullable = false)
     private String doi;
 
     @Column(nullable = false)

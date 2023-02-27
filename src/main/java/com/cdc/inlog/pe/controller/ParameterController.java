@@ -1,15 +1,21 @@
 package com.cdc.inlog.pe.controller;
 
 import static com.cdc.inlog.pe.util.Constants.*;
+
+import com.cdc.inlog.pe.dto.categoryticket.CategoryTicketDefaultDto;
+import com.cdc.inlog.pe.dto.categoryticket.CategoryTicketResponseByIdDto;
 import com.cdc.inlog.pe.dto.parameter.ParameterRegistrationDto;
 import com.cdc.inlog.pe.dto.statusticket.StatusTicketDefaultDto;
 import com.cdc.inlog.pe.dto.statusticket.StatusTicketResponseByIdDto;
 import com.cdc.inlog.pe.dto.typeticket.TypeTicketDefaultDto;
 import com.cdc.inlog.pe.dto.typeticket.TypeTicketResponseByIdDto;
+import com.cdc.inlog.pe.dto.username.UsernameDefaultDto;
 import com.cdc.inlog.pe.mapper.*;
 import com.cdc.inlog.pe.service.*;
 import java.util.List;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = API_PARAMETER)
 public class ParameterController {
+
+    @Autowired
+    private CategoryTicketMapper categoryTicketMapper;
+
+    @Autowired
+    private CategoryTicketService categoryTicketService;
 
     @Autowired
     private DepartmentMapper departmentMapper;
@@ -57,10 +69,22 @@ public class ParameterController {
     private OperatorService operatorService;
 
     @Autowired
+    private PriorityMapper priorityMapper;
+
+    @Autowired
+    private PriorityService priorityService;
+
+    @Autowired
     private ProvinceMapper provinceMapper;
 
     @Autowired
     private ProvinceService provinceService;
+
+    @Autowired
+    private StatusTicketMapper statusTicketMapper;
+
+    @Autowired
+    private StatusTicketService statusTicketService;
 
     @Autowired
     private TypeContractMapper typeContractMapper;
@@ -93,10 +117,10 @@ public class ParameterController {
     private TypeTicketService typeTicketService;
 
     @Autowired
-    private StatusTicketMapper statusTicketMapper;
+    private UsernameMapper usernameMapper;
 
     @Autowired
-    private StatusTicketService statusTicketService;
+    private UsernameService usernameService;
 
     @GetMapping(path = SUB_API_FOR_REGISTRATION, produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ParameterRegistrationDto> getParameterForRegistration() {
@@ -167,6 +191,34 @@ public class ParameterController {
                 typeTicketMapper.mapTypeTicketEntityTypeToTicketResponseByIdDto(
                         typeTicketService.getAllEntityById(codigo)), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = SUB_API_CATEGORY_TICKET, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<CategoryTicketDefaultDto>> getAllCategoryTicketActivated() {
+        log.info("ParameterController.getAllCategoryTicketActivated");
+        return new ResponseEntity<>(categoryTicketMapper.mapListCategoryTicketEntityToCategoryTicketDefaultDto(
+                categoryTicketService.getAllEntityActivated()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = SUB_API_CATEGORY_TICKET_BY_ID, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<CategoryTicketResponseByIdDto> getCategoryTicketById(@RequestParam
+                                                                       @Min(value = 1, message = MSG_POSITIVE)
+                                                                               Integer codigo) {
+        log.info("ParameterController.getCategoryTicketById");
+        log.info("ParameterController.getCategoryTicketById.codigo: " + codigo);
+        return categoryTicketService.existsEntityById(codigo) ? new ResponseEntity<>(
+                categoryTicketMapper.mapCategoryTicketEntityToCategoryResponseByIdDto(
+                        categoryTicketService.getAllEntityById(codigo)), HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = SUB_API_USERNAME_BY_ID_ROLE, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<UsernameDefaultDto>> getAllUsernameActivatedByIdRole(@RequestParam @Min(value = 1, message = MSG_POSITIVE)
+                                                                                     Integer codigo) {
+        log.info("ParameterController.getAllUsernameActivatedByIdRole");
+        log.info("ParameterController.getAllUsernameActivatedByIdRole.codigo: " + codigo);
+        return new ResponseEntity<>(usernameMapper.mapListUsernameEntityToUsernameDefaultDto(
+                usernameService.getAllEntityActivatedByIdRole(codigo)), HttpStatus.OK);
     }
 
 }

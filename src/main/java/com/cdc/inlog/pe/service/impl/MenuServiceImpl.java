@@ -5,8 +5,12 @@ import static com.cdc.inlog.pe.util.Constants.NUMBER_TWO;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_ZERO;
 import static com.cdc.inlog.pe.util.Constants.WORD_MENU;
 import com.cdc.inlog.pe.entity.MenuEntity;
+import com.cdc.inlog.pe.entity.RoleEntity;
 import com.cdc.inlog.pe.repository.MenuRepository;
+import com.cdc.inlog.pe.repository.RoleRepository;
 import com.cdc.inlog.pe.service.MenuService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +27,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private MenuRepository menuRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public List<MenuEntity> getAllEntity() {
@@ -59,7 +66,12 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuEntity registerEntity(MenuEntity menuEntity) {
         log.info("MenuServiceImpl.registerEntity");
-        return menuRepository.save(menuEntity);
+        MenuEntity menuEntityAux = menuRepository.save(menuEntity);
+        List<RoleEntity> roleEntityList = new ArrayList<>();
+        menuEntity.getRoles().forEach(roleEntity1 ->
+                roleEntityList.add(roleRepository.findById(roleEntity1.getIdRole()).orElse(new RoleEntity())));
+        menuEntityAux.setRoles(roleEntityList);
+        return menuEntityAux;
     }
 
     @Override

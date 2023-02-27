@@ -8,9 +8,11 @@ import static com.cdc.inlog.pe.util.Constants.NUMBER_ONE;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_TWO;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_ZERO;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVATED;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVATED_BY_ID_PERSON;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED_BY_ID_PERSON;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_PATCH_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_REGISTER;
@@ -58,6 +60,26 @@ public class PhoneController {
         log.info("PhoneController.getAllPhoneInactivated");
         return new ResponseEntity<>(phoneMapper.mapListPhoneEntityToPhoneDefaultDto(phoneService.getAllEntityDeactivated()),
                 HttpStatus.OK);
+    }
+
+    @GetMapping(path = SUB_API_ACTIVATED_BY_ID_PERSON, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<PhoneDefaultDto>> getAllPhoneActivatedByIdPerson(@RequestParam
+                                                                                    @Min(value = 1, message = MSG_POSITIVE)
+                                                                                    @NotEmpty(message = MSG_EMPTY) Integer codigo) {
+        log.info("EmailController.getAllPhoneActivatedByIdPerson");
+        log.info("EmailController.getAllPhoneActivatedByIdPerson.idPerson: " + codigo);
+        return new ResponseEntity<>(phoneMapper.mapListPhoneEntityToPhoneDefaultDto(
+                phoneService.getAllPhoneEntityActivatedByIdPerson(codigo)), HttpStatus.OK);
+    }
+
+    @GetMapping(path = SUB_API_INACTIVATED_BY_ID_PERSON, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<PhoneDefaultDto>> getAllPhoneDeactivatedByIdPerson(@RequestParam
+                                                                                @Min(value = 1, message = MSG_POSITIVE)
+                                                                                @NotEmpty(message = MSG_EMPTY) Integer codigo) {
+        log.info("EmailController.getAllPhoneDeactivatedByIdPerson");
+        log.info("EmailController.getAllPhoneDeactivatedByIdPerson.idPerson: " + codigo);
+        return new ResponseEntity<>(phoneMapper.mapListPhoneEntityToPhoneDefaultDto(
+                phoneService.getAllPhoneEntityDeactivatedByIdPerson(codigo)), HttpStatus.OK);
     }
 
     @PostMapping(path = SUB_API_REGISTER, produces = APPLICATION_JSON_UTF8_VALUE)

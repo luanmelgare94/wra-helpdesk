@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,13 +29,24 @@ public class TicketEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTicket;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "id_type_ticket", nullable = false, foreignKey = @ForeignKey(name = "FK_ticket_type_ticket"))
-    private TypeTicketEntity typeTicketEntity;
+    private TypeTicketEntity typeTicketEntity;*/
+
+    @ManyToOne
+    @JoinColumn(name = "id_category_ticket", nullable = false, foreignKey = @ForeignKey(name = "FK_ticket_category_ticket"))
+    private CategoryTicketEntity categoryTicketEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "id_priority", nullable = false, foreignKey = @ForeignKey(name = "FK_ticket_priority"))
+    private PriorityEntity priorityEntity;
 
     @ManyToOne
     @JoinColumn(name = "id_username", nullable = false, foreignKey = @ForeignKey(name = "FK_ticket_username"))
     private UsernameEntity usernameEntity;
+
+    @Column(length = 50, nullable = false)
+    private String subject;
 
     @Column(length = 200, nullable = false)
     private String description;
@@ -41,11 +54,20 @@ public class TicketEntity {
     @Column(length = 100, nullable = false)
     private String observation;
 
+    @JsonIgnore
+    @Column(name = "foto", updatable = false)
+    private byte[] evidence;
+
     @Column(nullable = false)
     private boolean active;
 
     @Column(nullable = false)
     private LocalDateTime dateRegister;
+
+    @Column(length = 50)
+    private String userLastUpdate;
+
+    private LocalDateTime dateLastUpdate;
 
     @OneToMany(mappedBy = "ticketEntity", cascade = { CascadeType.ALL }, orphanRemoval = true)
     private List<DetailTicketEntity> detailTicketEntityList;

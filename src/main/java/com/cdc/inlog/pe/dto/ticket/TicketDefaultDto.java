@@ -10,13 +10,19 @@ public class TicketDefaultDto {
 
     private Integer codigo;
 
-    private String tipoTicket;
+    private String categoriaTicket;
+
+    private TicketDefaultPrioridadDto prioridad;
 
     private TicketDefaultUsernameDto datosUsuario;
+
+    private String asunto;
 
     private String descripcion;
 
     private TicketDefaultDetailTicketDto datosAtencion;
+
+    private TicketDefaultUsernameDto asesorAsignado;
 
     private LocalDateTime fechoraCreacion;
 
@@ -31,6 +37,13 @@ public class TicketDefaultDto {
     @Setter
     public static class TicketDefaultDetailTicketDto {
         private String estado;
+        private String codigoColor;
+    }
+
+    @Getter
+    @Setter
+    public static class TicketDefaultPrioridadDto {
+        private String prioridad;
         private String codigoColor;
     }
 

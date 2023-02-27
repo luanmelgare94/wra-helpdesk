@@ -14,6 +14,8 @@ import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_PATCH_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_REGISTER;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_TICKET_IS_CATEGORIZED_AND_PRIORITIZED;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_TICKET_UPDATE_CATEGORY_AND_PRIORITY;
 
 import com.cdc.inlog.pe.dto.page.PagedResponseDto;
 import com.cdc.inlog.pe.dto.ticket.*;
@@ -97,6 +99,32 @@ public class TicketController {
         return ticketService.existsEntityById(codigo) ? new ResponseEntity<>(
                 ticketMapper.mapTicketEntityToTicketResponseByIdDto(ticketService.getAllEntityById(codigo)),
                 HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = SUB_API_TICKET_IS_CATEGORIZED_AND_PRIORITIZED, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Object> isCategorizedAndPrioritizedByIdTicket(@RequestParam @Min(value = 1, message = MSG_POSITIVE)
+                                                                             Integer codigo) {
+        log.info("TicketController.isCategorizedAndPrioritizedByIdTicket");
+        log.info("TicketController.isCategorizedAndPrioritizedByIdTicket.codigo");
+        return ticketService.isCategorizedAndPrioritized(codigo) ? new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping(path = SUB_API_TICKET_UPDATE_CATEGORY_AND_PRIORITY, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Object> updateTicketEntityIdCategorizedAndIdPriorityAndUserByIdTicket(@RequestParam @Min(value = 1, message = MSG_POSITIVE)
+                                                                                                 Integer codigo,
+                                                                                         @RequestParam @Min(value = 1, message = MSG_POSITIVE)
+                                                                                                 Integer codigoCategoria,
+                                                                                         @RequestParam @Min(value = 1, message = MSG_POSITIVE)
+                                                                                                 Integer codigoPrioridad,
+                                                                                         String usuarioMonitor) {
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket");
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigo");
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoCategoria");
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoPrioridad");
+        return ticketService.updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(
+                codigo, codigoCategoria, codigoPrioridad, usuarioMonitor) ? new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(path = SUB_API_PATCH_BY_ID, produces = APPLICATION_JSON_UTF8_VALUE)

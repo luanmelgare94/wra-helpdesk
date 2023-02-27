@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+
 public interface TicketRepository extends JpaRepository<TicketEntity, Integer> {
 
     @Modifying
@@ -19,11 +21,18 @@ public interface TicketRepository extends JpaRepository<TicketEntity, Integer> {
     public boolean getActiveOfTicketEntityByIdTicket(Integer idTicket);
 
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE public.ticket SET id_type_ticket = ?1, description = ?2, " +
-            "observation = ?3 WHERE id_ticket = ?4")
-    public Integer updateTicketEntityIdTypeTicketAndDescriptionAndObservationByIdTicket(Integer idTypeTicket,
-                                                                                    String description,
-                                                                                    String observation,
-                                                                                    Integer idTicket);
+    @Query(nativeQuery = true, value = "UPDATE public.ticket SET description = ?1, " +
+            "observation = ?2 WHERE id_ticket = ?3")
+    public Integer updateTicketEntityDescriptionAndObservationByIdTicket(String description,
+                                                                         String observation,
+                                                                         Integer idTicket);
 
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE public.ticket SET id_category = ?1, " +
+            "id_priority = ?2 AND user_last_update = ?3 AND date_last_update = ?4 WHERE id_ticket = ?5")
+    public Integer updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(Integer idCategory,
+                                                                                                   Integer idPriority,
+                                                                                                   String username,
+                                                                                                   LocalDateTime now,
+                                                                                                   Integer idTicket);
 }

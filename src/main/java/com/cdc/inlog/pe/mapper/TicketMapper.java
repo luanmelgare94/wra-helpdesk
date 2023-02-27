@@ -1,5 +1,6 @@
 package com.cdc.inlog.pe.mapper;
 
+import static com.cdc.inlog.pe.util.Constants.NUMBER_ONE;
 import static com.cdc.inlog.pe.util.Constants.TIME_ZONE_PERU;
 
 import com.cdc.inlog.pe.dto.ticket.*;
@@ -19,9 +20,12 @@ import org.mapstruct.Named;
 public interface TicketMapper {
 
     @Mapping(source = "idTicket", target = "codigo")
-    @Mapping(source = "typeTicketEntity.typeTicket", target = "tipoTicket")
+    @Mapping(source = "categoryTicketEntity.categoryTicket", target = "categoriaTicket")
+    @Mapping(source = "priorityEntity.priority", target = "prioridad.prioridad")
+    @Mapping(source = "priorityEntity.codeColor", target = "prioridad.codigoColor")
     @Mapping(source = "usernameEntity.username", target = "datosUsuario.usuario")
     @Mapping(expression = "java(usernameEntity.getPersonEntity().getFullName())", target = "datosUsuario.nombrePersona")
+    @Mapping(source = "subject", target = "asunto")
     @Mapping(source = "description", target = "descripcion")
     @Mapping(source = "dateRegister", target = "fechoraCreacion")
     TicketDefaultDto mapTicketEntityToTicketDefaultDtoSimple(TicketEntity ticketEntity);
@@ -35,6 +39,15 @@ public interface TicketMapper {
                 .max(Comparator.comparing(
                         detailTicketEntity -> detailTicketEntity.getStatusTicketEntity().getIdStatusTicket()))
                 .orElse(new DetailTicketEntity());
+        TicketDefaultDto.TicketDefaultUsernameDto ticketDefaultUsernameDto = new TicketDefaultDto.TicketDefaultUsernameDto();
+        if (detailTicketEntityAux.getStatusTicketEntity().getIdStatusTicket().equals(NUMBER_ONE)) {
+            ticketDefaultUsernameDto.setUsuario("SIN ASIGNAR");
+            ticketDefaultUsernameDto.setNombrePersona("SIN ASIGNAR");
+        } else {
+            ticketDefaultUsernameDto.setUsuario(detailTicketEntityAux.getUsernameEntity().getUsername());
+            ticketDefaultUsernameDto.setNombrePersona(detailTicketEntityAux.getUsernameEntity().getPersonEntity().getFullName());
+        }
+        ticketDefaultDto.setAsesorAsignado(ticketDefaultUsernameDto);
         TicketDefaultDto.TicketDefaultDetailTicketDto ticketDefaultDetailTicketDto = new TicketDefaultDto.TicketDefaultDetailTicketDto();
         ticketDefaultDetailTicketDto.setEstado(detailTicketEntityAux.getStatusTicketEntity().getStatusTicket());
         ticketDefaultDetailTicketDto.setCodigoColor(detailTicketEntityAux.getStatusTicketEntity().getCodeColor());
@@ -47,8 +60,8 @@ public interface TicketMapper {
 
     @Mapping(source = "idDetailTicket", target = "codigo")
     @Mapping(source = "statusTicketEntity.idStatusTicket", target = "datosEstadoTicket.codigo")
-    @Mapping(source = "statusTicketEntity.statusTicket", target = "datosEstadoTicket.codigoColor")
-    @Mapping(source = "statusTicketEntity.codeColor", target = "datosEstadoTicket.nombre")
+    @Mapping(source = "statusTicketEntity.statusTicket", target = "datosEstadoTicket.nombre")
+    @Mapping(source = "statusTicketEntity.codeColor", target = "datosEstadoTicket.codigoColor")
     @Mapping(source = "usernameEntity.idUsername", target = "datosUsuario.codigo")
     @Mapping(source = "usernameEntity.username", target = "datosUsuario.usuario")
     @Mapping(expression = "java(usernameEntity.getPersonEntity().getFullName())", target = "datosUsuario.nombrePersona")
@@ -59,13 +72,19 @@ public interface TicketMapper {
             DetailTicketEntity detailTicketEntity);
 
     @Mapping(source = "idTicket", target = "codigo")
-    @Mapping(source = "typeTicketEntity.idTypeTicket", target = "datosTipoTicket.codigo")
-    @Mapping(source = "typeTicketEntity.typeTicket", target = "datosTipoTicket.nombre")
+    @Mapping(source = "categoryTicketEntity.idCategoryTicket", target = "datosCategoriaTicket.codigo")
+    @Mapping(source = "categoryTicketEntity.categoryTicket", target = "datosCategoriaTicket.nombre")
+    @Mapping(source = "priorityEntity.idPriority", target = "datosPrioridad.codigo")
+    @Mapping(source = "priorityEntity.priority", target = "datosPrioridad.prioridad")
+    @Mapping(source = "priorityEntity.codeColor", target = "datosPrioridad.codigoColor")
     @Mapping(source = "usernameEntity.idUsername", target = "datosUsuario.codigo")
     @Mapping(source = "usernameEntity.username", target = "datosUsuario.usuario")
     @Mapping(expression = "java(usernameEntity.getPersonEntity().getFullName())", target = "datosUsuario.nombrePersona")
+    @Mapping(source = "subject", target = "asunto")
     @Mapping(source = "description", target = "descripcion")
     @Mapping(source = "observation", target = "observacion")
+    /*@Mapping(source = "observation", target = "asesorAsignado.codigo")
+    @Mapping(source = "observation", target = "asesorAsignado.nombre")*/
     @Mapping(source = "dateRegister", target = "fechaRegistro")
     TicketResponseByIdDto mapTicketEntityToTicketResponseByIdDtoSimple(TicketEntity ticketEntity);
 
@@ -79,8 +98,10 @@ public interface TicketMapper {
         return ticketResponseByIdDto;
     }
 
-    @Mapping(source = "ticketRequestDto.tipoTicket.codigo", target = "typeTicketEntity.idTypeTicket")
+    @Mapping(expression = "java(com.cdc.inlog.pe.util.Constants.NUMBER_NINE)", target = "typeTicketEntity.idCategoryTicket")
+    @Mapping(expression = "java(com.cdc.inlog.pe.util.Constants.NUMBER_FOUR)", target = "typeTicketEntity.idPriority")
     @Mapping(source = "ticketRequestDto.usuarioRegistro.codigo", target = "usernameEntity.idUsername")
+    @Mapping(source = "ticketRequestDto.asunto", target = "subject")
     @Mapping(source = "ticketRequestDto.descripcion", target = "description")
     @Mapping(source = "ticketRequestDto.observacion", target = "observation")
     @Mapping(constant = "true", target = "active")
@@ -107,12 +128,12 @@ public interface TicketMapper {
         return ticketEntity;
     }
 
-    @Mapping(source = "typeTicketEntity.typeTicket", target = "tipoTicket")
+    @Mapping(source = "categoryTicketEntity.categoryTicket", target = "categoriaTicket")
     @Mapping(source = "usernameEntity.username", target = "usuarioRegistro")
     TicketResponseDto mapTicketEntityToTicketResponseDto(TicketEntity ticketEntity);
 
     @Mapping(source = "codigo", target = "idTicket")
-    @Mapping(source = "ticketUpdateDto.codigoTipoTicket", target = "typeTicketEntity.idTypeTicket")
+    @Mapping(source = "ticketUpdateDto.codigoCategoriaTicket", target = "categoryTicketEntity.idCategoryTicket")
     @Mapping(source = "ticketUpdateDto.descripcion", target = "description")
     @Mapping(source = "ticketUpdateDto.observacion", target = "observation")
     TicketEntity mapTicketUpdateDtoToTicketEntity(TicketUpdateDto ticketUpdateDto, Integer codigo);

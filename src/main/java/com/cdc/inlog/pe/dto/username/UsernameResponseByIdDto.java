@@ -22,7 +22,7 @@ public class UsernameResponseByIdDto {
     @Getter
     @Setter
     public static class UsernameResponseByIdPersonDto {
-        private String codigo;
+        private Integer codigo;
         private String nombre;
         private String apellidoPaterno;
         private String apellidoMaterno;

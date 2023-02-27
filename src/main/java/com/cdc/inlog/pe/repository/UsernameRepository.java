@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface UsernameRepository extends JpaRepository<UsernameEntity, Integer> {
 
     @Modifying
@@ -26,5 +28,9 @@ public interface UsernameRepository extends JpaRepository<UsernameEntity, Intege
     public boolean existsUsernameEntityByUsername(String username);
 
     public Page<UsernameEntity> findByActive(boolean active, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM public.username us INNER JOIN public.username_role ur " +
+            " ON us.id_username = ur.id_username WHERE us.active = ?1 AND ur.id_role = ?2")
+    public List<UsernameEntity> getUsernameEntityByActiveAndRole(boolean active, Integer idRole);
 
 }
