@@ -120,4 +120,13 @@ public interface MenuMapper {
         return menuEntity;
     }
 
+    @Mapping(source = "menuEntity.idMenu", target = "codigo")
+    @Mapping(source = "menuEntity.icon", target = "icono")
+    @Mapping(source = "menuEntity.menu", target = "menu")
+    @Mapping(source = "menuEntity.url", target = "link")
+    @Mapping(source = "menuEntity.observation", target = "observacion")
+    MenuWithoutRoleDefaultDto mapMenuEntityToMenuWithoutRoleDefaultDto(MenuEntity menuEntity);
+
+    List<MenuWithoutRoleDefaultDto> mapListMenuEntityToListMenuWithoutRoleDefaultDto(List<MenuEntity> menuEntities);
+
 }

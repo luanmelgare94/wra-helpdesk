@@ -28,11 +28,10 @@ public interface TicketRepository extends JpaRepository<TicketEntity, Integer> {
                                                                          Integer idTicket);
 
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE public.ticket SET id_category = ?1, " +
-            "id_priority = ?2 AND user_last_update = ?3 AND date_last_update = ?4 WHERE id_ticket = ?5")
+    @Query(nativeQuery = true, value = "UPDATE public.ticket SET id_category_ticket = ?1, " +
+            "id_priority = ?2, user_last_update = 'cjara', date_last_update = ?3 WHERE id_ticket = ?4")
     public Integer updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(Integer idCategory,
                                                                                                    Integer idPriority,
-                                                                                                   String username,
                                                                                                    LocalDateTime now,
                                                                                                    Integer idTicket);
 }

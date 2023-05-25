@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 
     @Modifying
@@ -22,5 +24,13 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
                                                                        String url,
                                                                        String observation,
                                                                        Integer idMenu);
+
+    @Query(nativeQuery = true, value = "SELECT m.* " +
+            "FROM public.menu_role mr " +
+            "INNER JOIN username_role ur ON ur.id_role = mr.id_role " +
+            "INNER JOIN menu m ON m.id_menu = mr.id_menu " +
+            "INNER JOIN username u ON u.id_username = ur.id_username " +
+            "WHERE u.username = ?1")
+    public List<Object[]> getMenuByUsername(String username);
 
 }

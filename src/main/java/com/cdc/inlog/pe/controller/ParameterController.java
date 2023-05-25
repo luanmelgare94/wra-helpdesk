@@ -5,6 +5,7 @@ import static com.cdc.inlog.pe.util.Constants.*;
 import com.cdc.inlog.pe.dto.categoryticket.CategoryTicketDefaultDto;
 import com.cdc.inlog.pe.dto.categoryticket.CategoryTicketResponseByIdDto;
 import com.cdc.inlog.pe.dto.parameter.ParameterRegistrationDto;
+import com.cdc.inlog.pe.dto.priority.PriorityDefaultDto;
 import com.cdc.inlog.pe.dto.statusticket.StatusTicketDefaultDto;
 import com.cdc.inlog.pe.dto.statusticket.StatusTicketResponseByIdDto;
 import com.cdc.inlog.pe.dto.typeticket.TypeTicketDefaultDto;
@@ -210,6 +211,13 @@ public class ParameterController {
                 categoryTicketMapper.mapCategoryTicketEntityToCategoryResponseByIdDto(
                         categoryTicketService.getAllEntityById(codigo)), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = SUB_API_PRIORITY, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<PriorityDefaultDto>> getAllPriorityActivated() {
+        log.info("ParameterController.getAllPriorityActivated");
+        return new ResponseEntity<>(priorityMapper.mapListPriorityEntityToPriorityDefaultDto(
+                priorityService.getAllEntityActivated()), HttpStatus.OK);
     }
 
     @GetMapping(path = SUB_API_USERNAME_BY_ID_ROLE, produces = APPLICATION_JSON_UTF8_VALUE)

@@ -14,16 +14,15 @@ import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_PATCH_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_REGISTER;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_TEST_REPORT;
 import static com.cdc.inlog.pe.util.Constants.TIME_ZONE_PERU;
 
-import com.cdc.inlog.pe.dto.detailticket.DetailTicketRequestDto;
-import com.cdc.inlog.pe.dto.detailticket.DetailTicketResponseByIdDto;
-import com.cdc.inlog.pe.dto.detailticket.DetailTicketResponseDto;
-import com.cdc.inlog.pe.dto.detailticket.DetailTicketUpdateDto;
+import com.cdc.inlog.pe.dto.detailticket.*;
 import com.cdc.inlog.pe.mapper.DetailTicketMapper;
 import com.cdc.inlog.pe.service.DetailTicketService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +49,12 @@ public class DetailTicketController {
 
     @Autowired
     private DetailTicketService detailTicketService;
+
+    @GetMapping(path = SUB_API_TEST_REPORT, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<DetailTicketResponseStatisticsDto>> getReportStatistics() {
+        log.info("DetailTicketController.getReportStatistics");
+        return new ResponseEntity<>(detailTicketService.getStatistics(), HttpStatus.OK);
+    }
 
     @PostMapping(path = SUB_API_REGISTER, produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<DetailTicketResponseDto> registerDetailTicket(@RequestBody DetailTicketRequestDto

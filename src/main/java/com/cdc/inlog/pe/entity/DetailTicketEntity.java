@@ -38,10 +38,10 @@ public class DetailTicketEntity {
     @JoinColumn(name = "id_username", nullable = false, foreignKey = @ForeignKey(name = "FK_detail_ticket_username"))
     private UsernameEntity usernameEntity;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 150, nullable = false)
     private String description;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 150, nullable = false)
     private String observation;
 
     @Column(nullable = false)

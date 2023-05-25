@@ -33,4 +33,6 @@ public interface UsernameRepository extends JpaRepository<UsernameEntity, Intege
             " ON us.id_username = ur.id_username WHERE us.active = ?1 AND ur.id_role = ?2")
     public List<UsernameEntity> getUsernameEntityByActiveAndRole(boolean active, Integer idRole);
 
+    public UsernameEntity findByUsername(String username);
+
 }

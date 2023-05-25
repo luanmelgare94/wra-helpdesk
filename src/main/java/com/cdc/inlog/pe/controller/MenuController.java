@@ -10,14 +10,13 @@ import static com.cdc.inlog.pe.util.Constants.NUMBER_ZERO;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVATED;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_BY_ID;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_BY_USERNAME;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_PATCH_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_REGISTER;
-import com.cdc.inlog.pe.dto.menu.MenuDefaultDto;
-import com.cdc.inlog.pe.dto.menu.MenuRequestDto;
-import com.cdc.inlog.pe.dto.menu.MenuResponseDto;
-import com.cdc.inlog.pe.dto.menu.MenuUpdateDto;
+
+import com.cdc.inlog.pe.dto.menu.*;
 import com.cdc.inlog.pe.mapper.MenuMapper;
 import com.cdc.inlog.pe.service.MenuService;
 import java.util.List;
@@ -76,6 +75,14 @@ public class MenuController {
         return menuService.existsEntityById(codigo) ? new ResponseEntity<>(
                 menuMapper.mapMenuEntityToMenuResponseByIdDto(menuService.getAllEntityById(codigo)), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = SUB_API_GET_BY_USERNAME, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<MenuWithoutRoleDefaultDto>> getAllMenuByUsername(@RequestParam String usuario) {
+        log.info("MenuController.getAllMenuByUsername");
+        log.info("MenuController.getAllMenuByUsername.username: " + usuario);
+        return new ResponseEntity<>(menuMapper.mapListMenuEntityToListMenuWithoutRoleDefaultDto(
+                menuService.getAllMenuEntityByUsername(usuario)), HttpStatus.OK);
     }
 
     @PatchMapping(path = SUB_API_PATCH_BY_ID, produces = APPLICATION_JSON_UTF8_VALUE)

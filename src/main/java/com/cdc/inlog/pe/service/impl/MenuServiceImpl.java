@@ -10,6 +10,7 @@ import com.cdc.inlog.pe.repository.MenuRepository;
 import com.cdc.inlog.pe.repository.RoleRepository;
 import com.cdc.inlog.pe.service.MenuService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -122,5 +123,24 @@ public class MenuServiceImpl implements MenuService {
         log.info("MenuServiceImpl.deactivateEntityById");
         log.info("MenuServiceImpl.deactivateEntityById.id: " + id);
         return menuRepository.updateActiveOfMenuEntityById(false, id) == NUMBER_ONE;
+    }
+
+    @Override
+    public List<MenuEntity> getAllMenuEntityByUsername(String username) {
+        log.info("MenuServiceImpl.getAllMenuEntityByUsername");
+        log.info("MenuServiceImpl.getAllMenuEntityByUsername.username: " + username);
+        List<MenuEntity> menuEntities = new ArrayList<>();
+        menuRepository.getMenuByUsername(username).forEach(objects -> {
+            MenuEntity menuEntity = new MenuEntity();
+            menuEntity.setIdMenu((Integer.parseInt(String.valueOf(objects[0]))));
+            menuEntity.setActive(Boolean.parseBoolean(String.valueOf(objects[1])));
+            //menuEntity.setDateRegister(LocalDateTime.parse(String.valueOf(objects[2])));
+            menuEntity.setIcon(String.valueOf(objects[3]));
+            menuEntity.setMenu(String.valueOf(objects[4]));
+            menuEntity.setObservation(String.valueOf(objects[5]));
+            menuEntity.setUrl(String.valueOf(objects[6]));
+            menuEntities.add(menuEntity);
+        });
+        return menuEntities;
     }
 }

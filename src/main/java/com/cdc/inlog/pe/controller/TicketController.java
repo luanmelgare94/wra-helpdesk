@@ -117,13 +117,14 @@ public class TicketController {
                                                                                                  Integer codigoCategoria,
                                                                                          @RequestParam @Min(value = 1, message = MSG_POSITIVE)
                                                                                                  Integer codigoPrioridad,
-                                                                                         String usuarioMonitor) {
+                                                                                                @RequestParam Integer usuarioOperario) {
         log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket");
-        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigo");
-        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoCategoria");
-        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoPrioridad");
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigo: " + codigo);
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoCategoria: " + codigoCategoria);
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoPrioridad: " + codigoPrioridad);
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.usuarioOperario: " + usuarioOperario);
         return ticketService.updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(
-                codigo, codigoCategoria, codigoPrioridad, usuarioMonitor) ? new ResponseEntity<>(HttpStatus.OK) :
+                codigo, codigoCategoria, codigoPrioridad, usuarioOperario) ? new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

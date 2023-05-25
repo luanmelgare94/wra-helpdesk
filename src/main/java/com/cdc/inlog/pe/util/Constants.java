@@ -13,6 +13,8 @@ public class Constants {
     public static final String API_TICKET = "/ticket";
     public static final String API_USERNAME = "/username";
     public static final String APPLICATION_JSON_UTF8_VALUE = "application/json;charset=UTF-8";
+    public static final String CAPITAL_LETTER_WORD_POSTEST = "POSTEST";
+    public static final String CAPITAL_LETTER_WORD_PRETEST = "PRETEST";
     public static final String CHARACTER_SPACE = " ";
     public static final String DEFAULT_DESCRIPTION_TICKET = "TICKET NUEVO PARA ATENCION";
     public static final String DEFAULT_OBSERVATION = "NO HAY OBSERVACIONES";
@@ -21,7 +23,9 @@ public class Constants {
     public static final Integer NUMBER_ZERO = 0;
     public static final Integer NUMBER_ONE = 1;
     public static final Integer NUMBER_TWO = 2;
+    public static final Integer NUMBER_THREE = 3;
     public static final Integer NUMBER_FOUR = 4;
+    public static final Integer NUMBER_FIVE = 5;
     public static final Integer NUMBER_NINE = 9;
     public static final String SUB_API_ACTIVE = "/active";
     public static final String SUB_API_ACTIVATED = "/activated";
@@ -35,11 +39,14 @@ public class Constants {
     public static final String SUB_API_REGISTER = "/register";
     public static final String SUB_API_FOR_REGISTRATION = "/forRegistration";
     public static final String SUB_API_GET_BY_ID = "/getById";
+    public static final String SUB_API_GET_BY_USERNAME = "/getByUsername";
     public static final String SUB_API_PATCH_BY_ID = "/updateById";
     public static final String SUB_API_PASSWORD_BY_ID = "/changePassword";
+    public static final String SUB_API_PRIORITY = "/getPriority";
     public static final String SUB_API_STATUS_TICKET = "/getStatusTicket";
     public static final String SUB_API_STATUS_BY_TICKET = "/getStatusTicketByTicket";
     public static final String SUB_API_STATUS_TICKET_BY_ID = "/getStatusTicketById";
+    public static final String SUB_API_TEST_REPORT = "/testReport";
     public static final String SUB_API_TICKET_IS_CATEGORIZED_AND_PRIORITIZED = "/isCategorizedAndPrioritized";
     public static final String SUB_API_TICKET_UPDATE_CATEGORY_AND_PRIORITY = "/updateCategoryAndPriority";
     public static final String SUB_API_TYPE_TICKET = "/getTypeTicket";

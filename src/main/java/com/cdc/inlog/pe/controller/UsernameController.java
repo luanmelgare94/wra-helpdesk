@@ -108,6 +108,12 @@ public class UsernameController {
                 HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping(path = "/getid", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UsernameEntity> getById(@RequestParam @Min(value = 1, message = MSG_POSITIVE)
+                                                  @NotEmpty(message = MSG_EMPTY) Integer codigo) {
+        return new ResponseEntity<>(usernameService.getAllEntityById(codigo), HttpStatus.OK);
+    }
+
     @PatchMapping(path = SUB_API_PASSWORD_BY_ID, produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Object> changePassword(@RequestBody UsernameUpdateDto usernameUpdateDto) {
         log.info("UsernameController.changePassword");

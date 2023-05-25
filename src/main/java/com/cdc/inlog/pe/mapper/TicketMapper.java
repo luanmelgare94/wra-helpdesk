@@ -98,8 +98,8 @@ public interface TicketMapper {
         return ticketResponseByIdDto;
     }
 
-    @Mapping(expression = "java(com.cdc.inlog.pe.util.Constants.NUMBER_NINE)", target = "typeTicketEntity.idCategoryTicket")
-    @Mapping(expression = "java(com.cdc.inlog.pe.util.Constants.NUMBER_FOUR)", target = "typeTicketEntity.idPriority")
+    @Mapping(expression = "java(com.cdc.inlog.pe.util.Constants.NUMBER_NINE)", target = "categoryTicketEntity.idCategoryTicket")
+    @Mapping(expression = "java(com.cdc.inlog.pe.util.Constants.NUMBER_FOUR)", target = "priorityEntity.idPriority")
     @Mapping(source = "ticketRequestDto.usuarioRegistro.codigo", target = "usernameEntity.idUsername")
     @Mapping(source = "ticketRequestDto.asunto", target = "subject")
     @Mapping(source = "ticketRequestDto.descripcion", target = "description")

@@ -16,6 +16,6 @@ public interface TicketService extends GenericService<TicketEntity> {
     public boolean isCategorizedAndPrioritized(Integer idTicket);
 
     public boolean updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(Integer idTicket, Integer idCategory,
-                                                                        Integer idPriority, String userMonitor);
+                                                                        Integer idPriority, Integer userMonitor);
 
 }

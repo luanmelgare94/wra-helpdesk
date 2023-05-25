@@ -1,9 +1,6 @@
 package com.cdc.inlog.pe.service.impl;
 
-import com.cdc.inlog.pe.entity.CategoryTicketEntity;
-import com.cdc.inlog.pe.entity.TicketEntity;
-import com.cdc.inlog.pe.entity.TypeTicketEntity;
-import com.cdc.inlog.pe.entity.UsernameEntity;
+import com.cdc.inlog.pe.entity.*;
 import com.cdc.inlog.pe.repository.*;
 import com.cdc.inlog.pe.service.TicketService;
 
@@ -11,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.cdc.inlog.pe.service.UsernameService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -178,18 +177,38 @@ public class TicketServiceImpl implements TicketService {
                 !ticketEntity.getPriorityEntity().getIdPriority().equals(NUMBER_FOUR);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public boolean updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(Integer idTicket, Integer idCategory,
-                                                                        Integer idPriority, String userMonitor) {
+                                                                        Integer idPriority, Integer userMonitor) {
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority");
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idTicket: " + idTicket);
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idCategory: " + idCategory);
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idPriority: " + idPriority);
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.userMonitor: " + userMonitor);
-        return !ticketRepository
-                .updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(idCategory, idPriority,
-                        userMonitor, LocalDateTime.now(ZoneId.of(TIME_ZONE_PERU)), idTicket)
-                .equals(NUMBER_ZERO);
+        if (!ticketRepository
+                .updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(idCategory, idPriority
+                        , LocalDateTime.now(ZoneId.of(TIME_ZONE_PERU)), idTicket)
+                .equals(NUMBER_ZERO)) {
+            DetailTicketEntity detailTicketEntity = new DetailTicketEntity();
+            TicketEntity ticketEntity = new TicketEntity();
+            ticketEntity.setIdTicket(idTicket);
+            detailTicketEntity.setTicketEntity(ticketEntity);
+            StatusTicketEntity statusTicketEntity = new StatusTicketEntity();
+            statusTicketEntity.setIdStatusTicket(2);
+            detailTicketEntity.setStatusTicketEntity(statusTicketEntity);
+            detailTicketEntity.setActive(true);
+            detailTicketEntity.setDescription("TICKET ABIERTO");
+            detailTicketEntity.setObservation("SIN OBSERVACIONES");
+            UsernameEntity usernameEntity = new UsernameEntity();
+            usernameEntity.setIdUsername(userMonitor);
+            detailTicketEntity.setUsernameEntity(usernameEntity);
+            detailTicketEntity.setDateRegister(LocalDateTime.now());
+            detailTicketRepository.save(detailTicketEntity);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
