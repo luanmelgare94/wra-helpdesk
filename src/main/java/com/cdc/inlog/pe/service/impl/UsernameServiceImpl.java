@@ -196,4 +196,18 @@ public class UsernameServiceImpl implements UsernameService {
         return usernameRepository.getUsernameEntityByActiveAndRole(Boolean.TRUE, idRole);
     }
 
+    @Override
+    public boolean existsEntityByUsername(String username) {
+        log.info("UsernameServiceImpl.existsEntityByUsername");
+        log.info("UsernameServiceImpl.existsEntityByUsername.username: " + username);
+        return usernameRepository.existsUsernameEntityByUsername(username);
+    }
+
+    @Override
+    public UsernameEntity getEntityByUsername(String username) {
+        log.info("UsernameServiceImpl.getEntityByUsername");
+        log.info("UsernameServiceImpl.getEntityByUsername.username: " + username);
+        return usernameRepository.findByUsername(username);
+    }
+
 }

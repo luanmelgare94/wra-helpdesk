@@ -160,12 +160,32 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    public Page<TicketEntity> getAllEntityActivatedByUsername(Pageable pageable, String username) {
+        log.info("TicketServiceImpl.getAllEntityActivatedByUsername");
+        log.info("TicketServiceImpl.getAllEntityActivatedByUsername.pageNumber: " + pageable.getPageNumber());
+        log.info("TicketServiceImpl.getAllEntityActivatedByUsername.pageSize: " + pageable.getPageSize());
+        log.info("TicketServiceImpl.getAllEntityActivatedByUsername.username: " + username);
+        return ticketRepository.findByActiveAndUsername(Boolean.TRUE, username,
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(WORD_QUERY_ID_TICKET).ascending()));
+    }
+
+    @Override
     public Page<TicketEntity> getAllEntityDeactivated(Pageable pageable) {
         log.info("TicketServiceImpl.getAllEntityDeactivated");
         log.info("TicketServiceImpl.getAllEntityDeactivated.pageNumber: " + pageable.getPageNumber());
         log.info("TicketServiceImpl.getAllEntityDeactivated.pageSize: " + pageable.getPageSize());
         return ticketRepository.findByActive(Boolean.FALSE,
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(WORD_ID_TICKET).ascending()));
+    }
+
+    @Override
+    public Page<TicketEntity> getAllEntityDeactivatedByUsername(Pageable pageable, String username) {
+        log.info("TicketServiceImpl.getAllEntityDeactivatedByUsername");
+        log.info("TicketServiceImpl.getAllEntityDeactivatedByUsername.pageNumber: " + pageable.getPageNumber());
+        log.info("TicketServiceImpl.getAllEntityDeactivatedByUsername.pageSize: " + pageable.getPageSize());
+        log.info("TicketServiceImpl.getAllEntityDeactivatedByUsername.username: " + username);
+        return ticketRepository.findByActiveAndUsername(Boolean.FALSE, username,
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(WORD_QUERY_ID_TICKET).ascending()));
     }
 
     @Override
@@ -180,15 +200,17 @@ public class TicketServiceImpl implements TicketService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public boolean updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(Integer idTicket, Integer idCategory,
-                                                                        Integer idPriority, Integer userMonitor) {
+                                                                        Integer idPriority, Integer idAssignedUser,
+                                                                        String monitorUser) {
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority");
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idTicket: " + idTicket);
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idCategory: " + idCategory);
         log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idPriority: " + idPriority);
-        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.userMonitor: " + userMonitor);
+        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.idAssignedUser: " + idAssignedUser);
+        log.info("TicketServiceImpl.updateEntityIdCategoryAndIdPriority.monitorUser: " + monitorUser);
         if (!ticketRepository
-                .updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(idCategory, idPriority
-                        , LocalDateTime.now(ZoneId.of(TIME_ZONE_PERU)), idTicket)
+                .updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(idCategory, idPriority,
+                        monitorUser, LocalDateTime.now(ZoneId.of(TIME_ZONE_PERU)), idTicket)
                 .equals(NUMBER_ZERO)) {
             DetailTicketEntity detailTicketEntity = new DetailTicketEntity();
             TicketEntity ticketEntity = new TicketEntity();
@@ -201,7 +223,7 @@ public class TicketServiceImpl implements TicketService {
             detailTicketEntity.setDescription("TICKET ABIERTO");
             detailTicketEntity.setObservation("SIN OBSERVACIONES");
             UsernameEntity usernameEntity = new UsernameEntity();
-            usernameEntity.setIdUsername(userMonitor);
+            usernameEntity.setIdUsername(idAssignedUser);
             detailTicketEntity.setUsernameEntity(usernameEntity);
             detailTicketEntity.setDateRegister(LocalDateTime.now());
             detailTicketRepository.save(detailTicketEntity);

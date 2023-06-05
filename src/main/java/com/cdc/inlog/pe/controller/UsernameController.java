@@ -10,6 +10,7 @@ import static com.cdc.inlog.pe.util.Constants.NUMBER_ZERO;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVATED;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_BY_ID;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_BY_USERNAME;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_PASSWORD_BY_ID;
@@ -105,6 +106,16 @@ public class UsernameController {
         log.info("UsernameController.getUsernameById.codigo: " + codigo);
         return usernameService.existsEntityById(codigo) ? new ResponseEntity<>(
                 usernameMapper.mapUsernameEntityToUsernameResponseByIdDto(usernameService.getAllEntityById(codigo)),
+                HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = SUB_API_GET_BY_USERNAME, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Object> getUsernameByUsername(@RequestParam @Min(value = 1, message = MSG_POSITIVE)
+                                                  @NotEmpty(message = MSG_EMPTY) String usuario) {
+        log.info("UsernameController.getUsernameByUsername");
+        log.info("UsernameController.getUsernameByUsername.usuario: " + usuario);
+        return usernameService.existsEntityByUsername(usuario) ? new ResponseEntity<>(
+                usernameMapper.mapUsernameEntityToUsernameResponseByIdDto(usernameService.getEntityByUsername(usuario)),
                 HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -11,11 +11,16 @@ public interface TicketService extends GenericService<TicketEntity> {
 
     public Page<TicketEntity> getAllEntityActivated(Pageable pageable);
 
+    public Page<TicketEntity> getAllEntityActivatedByUsername(Pageable pageable, String username);
+
     public Page<TicketEntity> getAllEntityDeactivated(Pageable pageable);
+
+    public Page<TicketEntity> getAllEntityDeactivatedByUsername(Pageable pageable, String username);
 
     public boolean isCategorizedAndPrioritized(Integer idTicket);
 
     public boolean updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(Integer idTicket, Integer idCategory,
-                                                                        Integer idPriority, Integer userMonitor);
+                                                                        Integer idPriority, Integer idAssignedUser,
+                                                                        String monitorUser);
 
 }

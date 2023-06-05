@@ -19,4 +19,8 @@ public interface UsernameService extends GenericService<UsernameEntity> {
 
     public List<UsernameEntity> getAllEntityActivatedByIdRole(Integer idRole);
 
+    public boolean existsEntityByUsername(String username);
+
+    public UsernameEntity getEntityByUsername(String username);
+
 }

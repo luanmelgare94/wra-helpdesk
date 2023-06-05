@@ -30,11 +30,13 @@ public class Constants {
     public static final String SUB_API_ACTIVE = "/active";
     public static final String SUB_API_ACTIVATED = "/activated";
     public static final String SUB_API_ACTIVATED_BY_ID_PERSON = "/activatedByIdPerson";
+    public static final String SUB_API_ACTIVATED_BY_USERNAME = "/activatedbyusername/{username}";
     public static final String SUB_API_GET_ALL = "/getAll";
     public static final String SUB_API_CATEGORY_TICKET = "/getCategoryTicket";
     public static final String SUB_API_CATEGORY_TICKET_BY_ID = "/getCategoryTicketById";
     public static final String SUB_API_INACTIVE = "/inactive";
     public static final String SUB_API_INACTIVATED = "/inactivated";
+    public static final String SUB_API_INACTIVATED_BY_USERNAME = "/inactivatedbyusername/{username}";
     public static final String SUB_API_INACTIVATED_BY_ID_PERSON = "/inactivatedByIdPerson";
     public static final String SUB_API_REGISTER = "/register";
     public static final String SUB_API_FOR_REGISTRATION = "/forRegistration";
@@ -72,6 +74,7 @@ public class Constants {
     public static final String WORD_PHONE = "phone";
     public static final String WORD_PRIORITY = "priority";
     public static final String WORD_PROVINCE = "province";
+    public static final String WORD_QUERY_ID_TICKET = "id_ticket";
     public static final String WORD_RESET_TOKEN = "resetToken";
     public static final String WORD_ROLE = "role";
     public static final String WORD_STATUS_TICKET = "statusTicket";

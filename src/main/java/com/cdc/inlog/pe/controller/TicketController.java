@@ -8,9 +8,11 @@ import static com.cdc.inlog.pe.util.Constants.NUMBER_ONE;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_TWO;
 import static com.cdc.inlog.pe.util.Constants.NUMBER_ZERO;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVATED;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVATED_BY_USERNAME;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_ACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_GET_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED;
+import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVATED_BY_USERNAME;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_INACTIVE;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_PATCH_BY_ID;
 import static com.cdc.inlog.pe.util.Constants.SUB_API_REGISTER;
@@ -31,13 +33,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -68,12 +64,46 @@ public class TicketController {
                 ticketEntityPage.getNumberOfElements(), ticketEntityPage.isEmpty()), HttpStatus.OK);
     }
 
+    @GetMapping(path = SUB_API_ACTIVATED_BY_USERNAME, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PagedResponseDto<TicketDefaultDto>> getAllTicketActivatedByUsername(Pageable pageable,
+                                                                                              @PathVariable String username) {
+        log.info("TicketController.getAllTicketActivatedByUsername");
+        log.info("TicketController.getAllTicketActivatedByUsername.pageNumber: " + pageable.getPageNumber());
+        log.info("TicketController.getAllTicketActivatedByUsername.pageSize: " + pageable.getPageSize());
+        log.info("TicketController.getAllTicketActivatedByUsername.username: " + username);
+        Page<TicketEntity> ticketEntityPage = ticketService.getAllEntityActivatedByUsername(pageable, username);
+        return new ResponseEntity<>(new PagedResponseDto<TicketDefaultDto>(
+                ticketMapper.mapListTicketEntityToTicketDefaultDto(ticketEntityPage.getContent()),
+                pageMapper.mapPageableToPageableDto(ticketEntityPage.getPageable()),
+                ticketEntityPage.isLast(), ticketEntityPage.getTotalPages(),
+                ticketEntityPage.getTotalElements(), ticketEntityPage.getSize(), ticketEntityPage.getNumber(),
+                pageMapper.mapSortToSortDto(ticketEntityPage.getPageable()), ticketEntityPage.isFirst(),
+                ticketEntityPage.getNumberOfElements(), ticketEntityPage.isEmpty()), HttpStatus.OK);
+    }
+
     @GetMapping(path = SUB_API_INACTIVATED, produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PagedResponseDto<TicketDefaultDto>> getAllTicketInactivated(Pageable pageable) {
         log.info("TicketController.getAllTicketInactivated");
         log.info("TicketController.getAllTicketInactivated.pageNumber: " + pageable.getPageNumber());
         log.info("TicketController.getAllTicketInactivated.pageSize: " + pageable.getPageSize());
         Page<TicketEntity> ticketEntityPage = ticketService.getAllEntityDeactivated(pageable);
+        return new ResponseEntity<>(new PagedResponseDto<TicketDefaultDto>(
+                ticketMapper.mapListTicketEntityToTicketDefaultDto(ticketEntityPage.getContent()),
+                pageMapper.mapPageableToPageableDto(ticketEntityPage.getPageable()),
+                ticketEntityPage.isLast(), ticketEntityPage.getTotalPages(),
+                ticketEntityPage.getTotalElements(), ticketEntityPage.getSize(), ticketEntityPage.getNumber(),
+                pageMapper.mapSortToSortDto(ticketEntityPage.getPageable()), ticketEntityPage.isFirst(),
+                ticketEntityPage.getNumberOfElements(), ticketEntityPage.isEmpty()), HttpStatus.OK);
+    }
+
+    @GetMapping(path = SUB_API_INACTIVATED_BY_USERNAME, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PagedResponseDto<TicketDefaultDto>> getAllTicketInactivatedByUsername(Pageable pageable,
+                                                                                                @PathVariable String username) {
+        log.info("TicketController.getAllTicketInactivatedByUsername");
+        log.info("TicketController.getAllTicketInactivatedByUsername.pageNumber: " + pageable.getPageNumber());
+        log.info("TicketController.getAllTicketInactivatedByUsername.pageSize: " + pageable.getPageSize());
+        log.info("TicketController.getAllTicketInactivatedByUsername.username: " + username);
+        Page<TicketEntity> ticketEntityPage = ticketService.getAllEntityDeactivatedByUsername(pageable, username);
         return new ResponseEntity<>(new PagedResponseDto<TicketDefaultDto>(
                 ticketMapper.mapListTicketEntityToTicketDefaultDto(ticketEntityPage.getContent()),
                 pageMapper.mapPageableToPageableDto(ticketEntityPage.getPageable()),
@@ -117,14 +147,16 @@ public class TicketController {
                                                                                                  Integer codigoCategoria,
                                                                                          @RequestParam @Min(value = 1, message = MSG_POSITIVE)
                                                                                                  Integer codigoPrioridad,
-                                                                                                @RequestParam Integer usuarioOperario) {
+                                                                                                @RequestParam Integer codigoUsuarioOperario,
+                                                                                                @RequestParam String usuarioMonitor) {
         log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket");
         log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigo: " + codigo);
         log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoCategoria: " + codigoCategoria);
         log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoPrioridad: " + codigoPrioridad);
-        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.usuarioOperario: " + usuarioOperario);
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.codigoUsuarioOperario: " + codigoUsuarioOperario);
+        log.info("TicketController.updateTicketEntityIdCategorizedAndIdPriorityByIdTicket.usuarioMonitor: " + usuarioMonitor);
         return ticketService.updateEntityIdCategoryAndIdPriorityAndUserByIdTicket(
-                codigo, codigoCategoria, codigoPrioridad, usuarioOperario) ? new ResponseEntity<>(HttpStatus.OK) :
+                codigo, codigoCategoria, codigoPrioridad, codigoUsuarioOperario, usuarioMonitor) ? new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

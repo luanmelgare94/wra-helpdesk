@@ -17,6 +17,9 @@ public interface TicketRepository extends JpaRepository<TicketEntity, Integer> {
 
     public Page<TicketEntity> findByActive(boolean active, Pageable pageable);
 
+    @Query(nativeQuery = true, value = "SELECT t.* FROM public.ticket t INNER JOIN public.username u ON t.id_username = u.id_username WHERE t.active = ?1 AND u.username = ?2")
+    public Page<TicketEntity> findByActiveAndUsername(boolean active, String username, Pageable pageable);
+
     @Query(nativeQuery = true, value = "SELECT active FROM public.ticket WHERE id_ticket = ?1")
     public boolean getActiveOfTicketEntityByIdTicket(Integer idTicket);
 
@@ -29,9 +32,10 @@ public interface TicketRepository extends JpaRepository<TicketEntity, Integer> {
 
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE public.ticket SET id_category_ticket = ?1, " +
-            "id_priority = ?2, user_last_update = 'cjara', date_last_update = ?3 WHERE id_ticket = ?4")
+            "id_priority = ?2, user_last_update = ?3, date_last_update = ?4 WHERE id_ticket = ?5")
     public Integer updateTicketEntityIdCategoryAndIdPriorityAndUsernameAndDateLastUpdateByIdTicket(Integer idCategory,
                                                                                                    Integer idPriority,
+                                                                                                   String userLastUpdate,
                                                                                                    LocalDateTime now,
                                                                                                    Integer idTicket);
 }
